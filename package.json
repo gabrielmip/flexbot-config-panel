@@ -1,0 +1,33 @@
+{
+  "name": "flexbot-config-panel",
+  "version": "1.0.0",
+  "description": "Configuration panel for Telegram's FlexBot.",
+  "main": "src/index.js",
+  "scripts": {
+    "webpack": "./node_modules/webpack/bin/webpack.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielmip/flexbot-config-panel.git"
+  },
+  "author": "Gabriel Pedrosa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabrielmip/flexbot-config-panel/issues"
+  },
+  "homepage": "https://github.com/gabrielmip/flexbot-config-panel#readme",
+  "dependencies": {
+    "@types/react": "^16.8.8",
+    "@types/react-dom": "^16.8.2",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "webpack": "^4.29.6"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^5.2.1",
+    "source-map-loader": "^0.2.4",
+    "typescript": "^3.3.3333",
+    "webpack-cli": "^3.2.3"
+  }
+}
