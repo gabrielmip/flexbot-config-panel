@@ -1,0 +1,6 @@
+
+const urls: {config: string} = {
+  config: 'http://localhost:5000/config'
+};
+
+export default urls;
