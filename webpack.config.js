@@ -16,6 +16,11 @@ module.exports = {
       { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
     ]
   },
+  watch: true,
+  watchOptions: {
+    poll: true,
+    ignored: ['node_modules']
+  },
   externals: {
     "react": "React",
     "react-dom": "ReactDOM"

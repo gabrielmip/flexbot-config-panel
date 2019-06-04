@@ -1,9 +1,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { HashRouter, Route } from "react-router-dom";
 
-import { Hello } from './components/Hello';
+import ConfigPanelPage from './pages/ConfigPanelPage';
+
 
 ReactDOM.render(
-  <Hello compiler="TypeScript" framework="React" />,
-  document.getElementById('example')
+  <HashRouter>
+    <Route path="/configPanel/:token" component={ConfigPanelPage} />
+  </HashRouter>,
+  document.getElementById('root')
 );

@@ -4,7 +4,8 @@
   "description": "Configuration panel for Telegram's FlexBot.",
   "main": "src/index.js",
   "scripts": {
-    "webpack": "./node_modules/webpack/bin/webpack.js",
+    "start": "webpack-dev-server",
+    "webpack": "./node_modules/webpack/bin/webpack.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,14 +21,18 @@
   "dependencies": {
     "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.2",
+    "@types/react-router-dom": "^4.3.3",
+    "fsevents": "^2.0.7",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "react-router-dom": "^5.0.0",
     "webpack": "^4.29.6"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",
     "source-map-loader": "^0.2.4",
     "typescript": "^3.3.3333",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.5.1"
   }
 }
