@@ -18,29 +18,30 @@ interface GroupState {
 }
 
 export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
-  constructor (props: GroupProps) {
+  constructor(props: GroupProps) {
     super(props);
     const { answers, triggers, ignore_case, ignore_repeated_letters } = props.triggerGroup;
     this.state = {
       isVisible: true,
       ignore_case,
       ignore_repeated_letters,
-      answersInput: answers.map(({text}) => text).join('\n'),
-      triggersInput: triggers.map(({expression}) => expression).join('\n')
+      answersInput: answers.map(({ text }) => text).join('\n'),
+      triggersInput: triggers.map(({ expression }) => expression).join('\n')
     }
   }
 
-  updateAnswersState (event: React.ChangeEvent<HTMLTextAreaElement>) {
+  updateAnswersState(event: React.ChangeEvent<HTMLTextAreaElement>) {
     this.setState({ answersInput: event.target.value });
   }
 
-  updateTriggersState (event: React.ChangeEvent<HTMLTextAreaElement>) {
+  updateTriggersState(event: React.ChangeEvent<HTMLTextAreaElement>) {
     this.setState({ triggersInput: event.target.value });
   }
 
-  updateGroup () {
+  updateGroup() {
     const answers = splitTrim(this.state.answersInput);
     const triggers = splitTrim(this.state.triggersInput);
+
     updateTriggerGroup(this.props.triggerGroup, this.state.ignore_case,
       this.state.ignore_repeated_letters, answers, triggers)
       .then((id) => {
@@ -48,7 +49,7 @@ export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
       });
   }
 
-  deleteGroup () {
+  deleteGroup() {
     const groupId = this.props.triggerGroup.trigger_group_id;
     const deletionPromise: Promise<boolean> = (groupId)
       ? deleteTriggerGroup(groupId)
@@ -59,7 +60,7 @@ export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
     });
   }
 
-  invertOption (optionField : string) {
+  invertOption(optionField: string) {
     if (optionField === 'ignore_repeated_letters') {
       this.setState({ ignore_repeated_letters: !this.state.ignore_repeated_letters });
     } else if (optionField === 'ignore_case') {
@@ -67,11 +68,11 @@ export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
     }
   }
 
-  render () {
+  render() {
     if (!this.state.isVisible) {
       return null;
     }
-    
+
     return (
       <div>
         <textarea
