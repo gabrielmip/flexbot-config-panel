@@ -4,7 +4,7 @@
   "description": "Configuration panel for Telegram's FlexBot.",
   "main": "src/index.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --watch",
     "webpack": "./node_modules/webpack/bin/webpack.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

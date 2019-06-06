@@ -4,6 +4,7 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { Chat } from '../configManager/chatRelatedTypes';
 import { getChatInfo } from "../configManager/configManager";
+import { setDefaultAuthorizationHeader } from '../authentication/tokenHandler';
 
 import { Header } from "../components/Header";
 import { TriggerGroupContainer } from "../components/TriggerGroup";
@@ -20,8 +21,16 @@ type ConfigPanelState = {
 }
 
 export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigPanelState> {
+  token: string;
+
+  constructor (props: ConfigPanelProps) {
+    super(props);
+    this.token = this.props.match.params.token;
+    setDefaultAuthorizationHeader(this.token);
+  }
+
   componentDidMount () {
-    getChatInfo(this.props.match.params.token)
+    getChatInfo(this.token)
       .then((chat) => this.setState({ chat }));
   }
 

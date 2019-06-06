@@ -1,12 +1,14 @@
+type ID = number;
+
 export interface Chat {
-  "chat_id": number,
+  "chat_id": ID,
   "title": string,
   "trigger_groups": Array<TriggerGroup>
 }
 
 export interface TriggerGroup {
-  "trigger_group_id": number,
-  "chat_id": number,
+  "trigger_group_id"?: ID,
+  "chat_id": ID,
   "ignore_case": boolean,
   "ignore_repeated_letters": boolean,
   "answers": Array<Answer>,
@@ -14,13 +16,13 @@ export interface TriggerGroup {
 }
 
 export interface Answer {
-  "answer_id": number,
+  "answer_id": ID,
   "text": string,
-  "trigger_group_id": number
+  "trigger_group_id": ID 
 }
 
 export interface Trigger {
   "expression": string,
-  "trigger_group_id": number,
-  "trigger_id": number
+  "trigger_group_id": ID,
+  "trigger_id": ID
 }

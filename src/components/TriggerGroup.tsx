@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Component } from 'react';
 
 import { Chat, TriggerGroup, Trigger } from '../configManager/chatRelatedTypes';
+import { updateTriggerGroup } from '../configManager/configManager';
+import { splitTrim } from "../misc";
 
 interface GroupProps {
   triggerGroup: TriggerGroup
@@ -35,7 +37,13 @@ export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
   }
 
   updateGroup () {
-    console.log(this.state);
+    const answers = splitTrim(this.state.answersInput);
+    const triggers = splitTrim(this.state.triggersInput);
+    updateTriggerGroup(this.props.triggerGroup, this.state.ignore_case,
+      this.state.ignore_repeated_letters, answers, triggers)
+      .then((id) => {
+        this.props.triggerGroup.trigger_group_id = id;
+      });
   }
 
   deleteGroup () {
