@@ -9,6 +9,12 @@ export async function getChatInfo (token: string): Promise<Chat> {
   return chat;
 }
 
+export async function deleteTriggerGroup (id: ID): Promise<boolean> {
+  const url = `${urls.config}/trigger_groups/${id}`;
+  const {data: {deleted}} = await axios.delete(url);
+  return deleted;
+}
+
 export async function updateTriggerGroup (
   triggerGroup: TriggerGroup,
   ignore_case: boolean,
@@ -16,16 +22,15 @@ export async function updateTriggerGroup (
   answers: Array<string>,
   triggers: Array<string>
 ): Promise<ID> {
-  const answersToSend = answers.map((text) => ({text}));
-  const triggersToSend = triggers.map((expression) => ({expression}));
-
   const url = (triggerGroup.trigger_group_id)
     ? `${urls.config}/trigger_groups/${triggerGroup.trigger_group_id}`
     : `${urls.config}/trigger_groups`;
-  const method = (triggerGroup.trigger_group_id)
+  const requestMethod = (triggerGroup.trigger_group_id)
     ? axios.put
     : axios.post;
   
+  const answersToSend = answers.map((text) => ({text}));
+  const triggersToSend = triggers.map((expression) => ({expression}));
   const body = {
     answers: answersToSend,
     triggers: triggersToSend,
@@ -33,6 +38,6 @@ export async function updateTriggerGroup (
     ignore_repeated_letters
   };
 
-  return method(url, body)
-    .then(({data: {trigger_group_id}}) => trigger_group_id);
+  const {data: {trigger_group_id}} = await requestMethod(url, body);
+  return trigger_group_id;
 }

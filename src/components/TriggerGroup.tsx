@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Component } from 'react';
 
 import { Chat, TriggerGroup, Trigger } from '../configManager/chatRelatedTypes';
-import { updateTriggerGroup } from '../configManager/configManager';
+import { updateTriggerGroup, deleteTriggerGroup } from '../configManager/configManager';
 import { splitTrim } from "../misc";
 
 interface GroupProps {
@@ -13,7 +13,8 @@ interface GroupState {
   ignore_case: boolean,
   ignore_repeated_letters: boolean,
   answersInput: string,
-  triggersInput: string
+  triggersInput: string,
+  isVisible: boolean
 }
 
 export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
@@ -21,6 +22,7 @@ export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
     super(props);
     const { answers, triggers, ignore_case, ignore_repeated_letters } = props.triggerGroup;
     this.state = {
+      isVisible: true,
       ignore_case,
       ignore_repeated_letters,
       answersInput: answers.map(({text}) => text).join('\n'),
@@ -47,7 +49,14 @@ export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
   }
 
   deleteGroup () {
-    console.log(this.state);
+    const groupId = this.props.triggerGroup.trigger_group_id;
+    const deletionPromise: Promise<boolean> = (groupId)
+      ? deleteTriggerGroup(groupId)
+      : Promise.resolve(true);
+
+    deletionPromise.then((deleted) => {
+      this.setState({ isVisible: !deleted });
+    });
   }
 
   invertOption (optionField : string) {
@@ -59,6 +68,10 @@ export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
   }
 
   render () {
+    if (!this.state.isVisible) {
+      return null;
+    }
+    
     return (
       <div>
         <textarea
@@ -82,11 +95,11 @@ export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
         <button
           onClick={() => this.updateGroup()}>
           Atualizar
-        </button>
+          </button>
         <button
           onClick={() => this.deleteGroup()}>
           Deletar
-        </button>
+          </button>
       </div>
     );
   }
