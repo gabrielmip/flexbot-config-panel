@@ -3,7 +3,7 @@ import { Props, Component } from 'react';
 import { RouteComponentProps } from "react-router-dom";
 
 import { Chat } from '../configManager/chatRelatedTypes';
-import { getChatInfo } from "../configManager/configManager";
+import { getChatInfo, addTriggerGroup, updateTriggerGroup } from "../configManager/configManager";
 import { setDefaultAuthorizationHeader } from '../authentication/tokenHandler';
 
 import { Header } from "../components/Header";
@@ -35,9 +35,20 @@ export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigP
   }
 
   listTriggerGroups () {
-    return this.state.chat.trigger_groups.map((triggerGroup) => (
-      <TriggerGroupContainer triggerGroup={triggerGroup} key={triggerGroup.trigger_group_id}/>
-    ));
+    const groups = this.state.chat.trigger_groups;
+    return groups
+      .sort((left, right) => right.trigger_group_id - left.trigger_group_id)
+      .map((triggerGroup) => (
+        <TriggerGroupContainer triggerGroup={triggerGroup} key={triggerGroup.trigger_group_id}/>
+      ));
+  }
+
+  addTriggerGroup () {
+    addTriggerGroup(this.state.chat.chat_id)
+      .then((newTriggerGroup) => {
+        this.state.chat.trigger_groups.unshift(newTriggerGroup);
+        this.setState({ chat: this.state.chat });
+      });
   }
 
   render() {
@@ -46,6 +57,7 @@ export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigP
         <div>
           <Header chat={this.state.chat} />
           <div>
+            <button onClick={() => this.addTriggerGroup()}>Nova resposta</button>
             {this.listTriggerGroups()}
           </div>
         </div>

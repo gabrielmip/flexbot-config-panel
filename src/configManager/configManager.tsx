@@ -15,17 +15,38 @@ export async function deleteTriggerGroup (id: ID): Promise<boolean> {
   return deleted;
 }
 
+export async function addTriggerGroup(chatId: ID) {
+  const group: TriggerGroup = {
+    chat_id: chatId,
+    ignore_case: true,
+    ignore_repeated_letters: true,
+    answers: [],
+    triggers: []
+  };
+
+  const trigger_group_id = await updateTriggerGroup(
+    null,
+    group.ignore_case,
+    group.ignore_repeated_letters,
+    [],
+    []
+  );
+  
+  return { ...group, trigger_group_id };
+}
+
 export async function updateTriggerGroup (
-  triggerGroup: TriggerGroup,
+  triggerGroupId: ID | null,
   ignore_case: boolean,
   ignore_repeated_letters: boolean,
   answers: Array<string>,
   triggers: Array<string>
 ): Promise<ID> {
-  const url = (triggerGroup.trigger_group_id)
-    ? `${urls.config}/trigger_groups/${triggerGroup.trigger_group_id}`
+
+  const url = (triggerGroupId)
+    ? `${urls.config}/trigger_groups/${triggerGroupId}`
     : `${urls.config}/trigger_groups`;
-  const requestMethod = (triggerGroup.trigger_group_id)
+  const requestMethod = (triggerGroupId)
     ? axios.put
     : axios.post;
   
