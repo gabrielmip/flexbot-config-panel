@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
 import urls from '../../config/urls';
-import { ID, Chat, TriggerGroup } from "./chatRelatedTypes";
+import { ID, Chat, TriggerGroup } from './chatRelatedTypes';
 
 export async function getChatInfo (token: string): Promise<Chat> {
   const url = `${urls.config}/${token}`;
@@ -39,8 +39,8 @@ export async function updateTriggerGroup (
   triggerGroupId: ID | null,
   ignore_case: boolean,
   ignore_repeated_letters: boolean,
-  answers: Array<string>,
-  triggers: Array<string>
+  answers: string[],
+  triggers: string[]
 ): Promise<ID> {
 
   const url = (triggerGroupId)

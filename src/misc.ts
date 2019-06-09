@@ -1,4 +1,4 @@
-export function splitTrim (text: string): Array<string> {
+export function splitTrim (text: string): string[] {
   return text.split('\n')
     .map((token) => token.trim());
 }

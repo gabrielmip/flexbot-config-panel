@@ -3,18 +3,18 @@ import { Component } from 'react';
 
 import { TriggerGroup } from '../configManager/chatRelatedTypes';
 import { updateTriggerGroup, deleteTriggerGroup } from '../configManager/configManager';
-import { splitTrim } from "../misc";
+import { splitTrim } from '../misc';
 
 interface GroupProps {
-  triggerGroup: TriggerGroup
-};
+  triggerGroup: TriggerGroup;
+}
 
 interface GroupState {
-  ignore_case: boolean,
-  ignore_repeated_letters: boolean,
-  answersInput: string,
-  triggersInput: string,
-  isVisible: boolean
+  ignore_case: boolean;
+  ignore_repeated_letters: boolean;
+  answersInput: string;
+  triggersInput: string;
+  isVisible: boolean;
 }
 
 export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
@@ -85,26 +85,26 @@ export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
         <textarea
           value={this.state.answersInput}
           onChange={this.updateAnswersState} />
-        <label htmlFor="ignore_case">Ignorar caixa</label>
+        <label htmlFor='ignore_case'>Ignorar caixa</label>
         <input
-          type="checkbox"
-          name="ignore_case"
+          type='checkbox'
+          name='ignore_case'
           defaultChecked={this.props.triggerGroup.ignore_case}
           onChange={() => this.invertOption('ignore_case')} />
-        <label htmlFor="ignore_repeated_letters">Ignorar sequências de uma letra</label>
+        <label htmlFor='ignore_repeated_letters'>Ignorar sequências de uma letra</label>
         <input
-          name="ignore_repeated_letters"
-          type="checkbox"
+          name='ignore_repeated_letters'
+          type='checkbox'
           defaultChecked={this.props.triggerGroup.ignore_repeated_letters}
           onChange={() => this.invertOption('ignore_repeated_letters')} />
         <button
           onClick={() => this.updateGroup()}>
           Atualizar
-          </button>
+        </button>
         <button
           onClick={() => this.deleteGroup()}>
           Deletar
-          </button>
+        </button>
       </div>
     );
   }

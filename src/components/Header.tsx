@@ -5,7 +5,7 @@ import { Chat } from '../configManager/chatRelatedTypes';
 
 interface HeaderProps extends Props<{}> {
   chat: Chat;
-};
+}
 
 export class Header extends Component<HeaderProps> {
   render () {

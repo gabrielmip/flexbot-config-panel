@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { Props, Component } from 'react';
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from 'react-router-dom';
 
 import { Chat } from '../configManager/chatRelatedTypes';
-import { getChatInfo, addTriggerGroup, updateTriggerGroup } from "../configManager/configManager";
+import { getChatInfo, addTriggerGroup, updateTriggerGroup } from '../configManager/configManager';
 import { setDefaultAuthorizationHeader } from '../authentication/tokenHandler';
 
-import { Header } from "../components/Header";
-import { TriggerGroupContainer } from "../components/TriggerGroup";
+import { Header } from '../components/Header';
+import { TriggerGroupContainer } from '../components/TriggerGroup';
 
-type ConfigPanelParams = {
+interface ConfigPanelParams {
   token: string;
-};
+}
 
 interface ConfigPanelProps extends
-  RouteComponentProps<ConfigPanelParams>, Props<ConfigPanelParams> { };
+  RouteComponentProps<ConfigPanelParams>, Props<ConfigPanelParams> { }
 
-type ConfigPanelState = {
+interface ConfigPanelState {
   chat: Chat | null;
 }
 
