@@ -3,7 +3,7 @@ import { Props, Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { Chat } from '../configManager/chatRelatedTypes';
-import { getChatInfo, addTriggerGroup, updateTriggerGroup } from '../configManager/configManager';
+import { getChatInfo, addTriggerGroup } from '../configManager/configManager';
 import { setDefaultAuthorizationHeader } from '../authentication/tokenHandler';
 
 import { Header } from '../components/Header';
@@ -35,23 +35,23 @@ export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigP
   }
 
   listTriggerGroups () {
-    const groups = this.state.chat.trigger_groups;
+    const groups = this.state.chat.triggerGroups;
     return groups
-      .sort((left, right) => right.trigger_group_id - left.trigger_group_id)
+      .sort((left, right) => right.triggerGroupId - left.triggerGroupId)
       .map((triggerGroup) => (
-        <TriggerGroupContainer triggerGroup={triggerGroup} key={triggerGroup.trigger_group_id}/>
+        <TriggerGroupContainer triggerGroup={triggerGroup} key={triggerGroup.triggerGroupId}/>
       ));
   }
 
   addTriggerGroup () {
-    addTriggerGroup(this.state.chat.chat_id)
+    addTriggerGroup(this.state.chat.chatId)
       .then((newTriggerGroup) => {
-        this.state.chat.trigger_groups.unshift(newTriggerGroup);
+        this.state.chat.triggerGroups.unshift(newTriggerGroup);
         this.setState({ chat: this.state.chat });
       });
   }
 
-  render() {
+  render () {
     if (this.state !== null) {
       return (
         <div>

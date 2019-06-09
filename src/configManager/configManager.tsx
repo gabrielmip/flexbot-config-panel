@@ -2,11 +2,12 @@ import axios from 'axios';
 
 import urls from '../../config/urls';
 import { ID, Chat, TriggerGroup } from './chatRelatedTypes';
+import { camelCasedChat } from '../utils/ioTransforms';
 
 export async function getChatInfo (token: string): Promise<Chat> {
   const url = `${urls.config}/${token}`;
   const { data: chat } = await axios.get(url);
-  return chat;
+  return camelCasedChat(chat);
 }
 
 export async function deleteTriggerGroup (id: ID): Promise<boolean> {
@@ -15,30 +16,30 @@ export async function deleteTriggerGroup (id: ID): Promise<boolean> {
   return deleted;
 }
 
-export async function addTriggerGroup(chatId: ID) {
+export async function addTriggerGroup (chatId: ID) {
   const group: TriggerGroup = {
-    chat_id: chatId,
-    ignore_case: true,
-    ignore_repeated_letters: true,
+    chatId,
+    ignoreCase: true,
+    ignoreRepeatedLetters: true,
     answers: [],
     triggers: []
   };
 
-  const trigger_group_id = await updateTriggerGroup(
+  const triggerGroupId = await updateTriggerGroup(
     null,
-    group.ignore_case,
-    group.ignore_repeated_letters,
+    group.ignoreCase,
+    group.ignoreRepeatedLetters,
     [],
     []
   );
   
-  return { ...group, trigger_group_id };
+  return { ...group, triggerGroupId };
 }
 
 export async function updateTriggerGroup (
   triggerGroupId: ID | null,
-  ignore_case: boolean,
-  ignore_repeated_letters: boolean,
+  ignoreCase: boolean,
+  ignoreRepeatedLetters: boolean,
   answers: string[],
   triggers: string[]
 ): Promise<ID> {
@@ -53,12 +54,12 @@ export async function updateTriggerGroup (
   const answersToSend = answers.map((text) => ({text}));
   const triggersToSend = triggers.map((expression) => ({expression}));
   const body = {
-    answers: answersToSend,
-    triggers: triggersToSend,
-    ignore_case,
-    ignore_repeated_letters
+    'answers': answersToSend,
+    'triggers': triggersToSend,
+    'ignore_case': ignoreCase,
+    'ignore_repeated_letters': ignoreRepeatedLetters
   };
 
-  const {data: {trigger_group_id}} = await requestMethod(url, body);
-  return trigger_group_id;
+  const {data} = await requestMethod(url, body);
+  return data.trigger_group_id;
 }
