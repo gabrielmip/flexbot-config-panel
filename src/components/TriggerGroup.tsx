@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { Component } from 'react';
+import { TextField, Box, Button } from '@material-ui/core';
+import { withStyles, WithStyles, Card, CardContent, Collapse } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
+import styles from '../styles/TriggerGroup';
 import { TriggerGroup } from '../configManager/chatRelatedTypes';
 import { updateTriggerGroup, deleteTriggerGroup } from '../configManager/configManager';
 import { splitTrim } from '../utils/misc';
 
-interface GroupProps {
+interface GroupProps extends WithStyles<typeof styles> {
   triggerGroup: TriggerGroup;
 }
 
@@ -15,27 +19,56 @@ interface GroupState {
   answersInput: string;
   triggersInput: string;
   isVisible: boolean;
+  showDeleteButton: boolean;
 }
 
-export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
+class UndecoratedTriggerGroup extends Component<GroupProps, GroupState> {
+  private showActionsDelay = 200;
+  private showActionsTimeout = 0;
+  
   constructor (props: GroupProps) {
     super(props);
     const { answers, triggers, ignoreCase, ignoreRepeatedLetters } = props.triggerGroup;
     this.state = {
       isVisible: true,
       ignoreCase,
+      showDeleteButton: false,
       ignoreRepeatedLetters,
       answersInput: answers.map(({ text }) => text).join('\n'),
       triggersInput: triggers.map(({ expression }) => expression).join('\n')
     }
   }
 
-  updateAnswersState (event: React.ChangeEvent<HTMLTextAreaElement>) {
-    this.setState({ answersInput: event.target.value });
+  getCardStyle () {
+    const paddingAmount = (this.state.showDeleteButton) ? 10 : 20;
+    return { paddingBottom: `${paddingAmount}px !important` };
   }
 
-  updateTriggersState (event: React.ChangeEvent<HTMLTextAreaElement>) {
+  startActionBoxTimeout () {
+    if (this.showActionsTimeout) {
+      window.clearTimeout(this.showActionsTimeout);
+    }
+
+    this.showActionsTimeout = window.setTimeout(() => {
+      this.setState({ showDeleteButton: true });
+    }, this.showActionsDelay)
+  }
+
+  closeActionBox () {
+    if (this.showActionsTimeout) {
+      window.clearTimeout(this.showActionsTimeout);
+    }
+    this.setState({ showDeleteButton: false });
+  }
+
+  updateAnswersState (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) {
+    this.setState({ answersInput: event.target.value });
+    this.updateGroup();
+  }
+
+  updateTriggersState (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) {
     this.setState({ triggersInput: event.target.value });
+    this.updateGroup();
   }
 
   async updateGroup () {
@@ -64,48 +97,56 @@ export class TriggerGroupContainer extends Component<GroupProps, GroupState> {
     });
   }
 
-  invertOption (optionField: string) {
-    if (optionField === 'ignoreRepeatedLetters') {
-      this.setState({ ignoreRepeatedLetters: !this.state.ignoreRepeatedLetters });
-    } else if (optionField === 'ignoreCase') {
-      this.setState({ ignoreCase: !this.state.ignoreCase });
-    }
-  }
-
   render () {
     if (!this.state.isVisible) {
       return null;
     }
 
     return (
-      <div>
-        <textarea
-          value={this.state.triggersInput}
-          onChange={this.updateTriggersState} />
-        <textarea
-          value={this.state.answersInput}
-          onChange={this.updateAnswersState} />
-        <label htmlFor='ignoreCase'>Ignorar caixa</label>
-        <input
-          type='checkbox'
-          name='ignoreCase'
-          defaultChecked={this.props.triggerGroup.ignoreCase}
-          onChange={() => this.invertOption('ignoreCase')} />
-        <label htmlFor='ignoreRepeatedLetters'>Ignorar sequências de uma letra</label>
-        <input
-          name='ignoreRepeatedLetters'
-          type='checkbox'
-          defaultChecked={this.props.triggerGroup.ignoreRepeatedLetters}
-          onChange={() => this.invertOption('ignoreRepeatedLetters')} />
-        <button
-          onClick={() => this.updateGroup()}>
-          Atualizar
-        </button>
-        <button
-          onClick={() => this.deleteGroup()}>
-          Deletar
-        </button>
+      <div
+        style={{ position: 'relative' }}
+        onMouseEnter={() => this.startActionBoxTimeout()}
+        onMouseLeave={() => this.closeActionBox()}>
+        <Card
+          className={this.props.classes.triggerGroup}>
+          <CardContent
+            className={this.props.classes.card}
+            style={this.getCardStyle()}>
+            <Box display='flex' flexWrap='nowrap'>
+              <TextField
+                className={this.props.classes.field}
+                label='When you say...'
+                placeholder=''
+                multiline
+                rows='3'
+                value={this.state.triggersInput}
+                onChange={(e) => this.updateTriggersState(e)}
+                variant='outlined' />
+              <TextField
+                className={this.props.classes.field}
+                style={{ marginLeft: 15 }}
+                label='The bot says...'
+                placeholder=''
+                multiline
+                rows='3'
+                value={this.state.answersInput}
+                onChange={(e) => this.updateAnswersState(e)}
+                variant='outlined' />
+            </Box>
+          </CardContent>
+          <Collapse in={this.state.showDeleteButton}>
+            <Button 
+              color='secondary'
+              className={this.props.classes.actionButtons}
+              onClick={() => this.deleteGroup()}>
+              <DeleteIcon />
+              Delete
+            </Button>
+          </Collapse>
+        </Card>
       </div>
     );
   }
 }
+
+export const TriggerGroupContainer = withStyles(styles)(UndecoratedTriggerGroup);

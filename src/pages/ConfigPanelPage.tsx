@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Props, Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import { Container, Box, Button } from '@material-ui/core';
 
 import { Chat } from '../configManager/chatRelatedTypes';
 import { getChatInfo, addTriggerGroup } from '../configManager/configManager';
 import { setDefaultAuthorizationHeader } from '../authentication/tokenHandler';
-
 import { Header } from '../components/Header';
 import { TriggerGroupContainer } from '../components/TriggerGroup';
 
@@ -54,13 +54,18 @@ export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigP
   render () {
     if (this.state !== null) {
       return (
-        <div>
+        <Container maxWidth='md'>
           <Header chat={this.state.chat} />
-          <div>
-            <button onClick={() => this.addTriggerGroup()}>Nova resposta</button>
+          <Box style={{marginTop: 50}}>
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={() => this.addTriggerGroup()}>
+              Novo
+            </Button>
             {this.listTriggerGroups()}
-          </div>
-        </div>
+          </Box>
+        </Container>
       );
     } else {
       return <h1>Loading</h1>;
