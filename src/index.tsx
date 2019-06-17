@@ -9,7 +9,7 @@ import ConfigPanelPage from './pages/ConfigPanelPage';
 
 ReactDOM.render(
   <HashRouter>
-    <Route path='/configPanel/:token' component={ConfigPanelPage} />
+    <Route path='/:token' component={ConfigPanelPage} />
   </HashRouter>,
   document.getElementById('root')
 );
