@@ -27,6 +27,7 @@ interface GroupState {
 class UndecoratedTriggerGroup extends Component<GroupProps, GroupState> {
   private showActionsDelay = 200;
   private showActionsTimeout = 0;
+  private updateDebounce = 0;
   
   constructor (props: GroupProps) {
     super(props);
@@ -66,18 +67,25 @@ class UndecoratedTriggerGroup extends Component<GroupProps, GroupState> {
   updateAnswersState (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) {
     const answersInput = event.target.value;
     this.setState({ answersInput });
-    this.updateGroup(this.state.triggersInput, answersInput);
+    this.setUpdateDebounce();
   }
 
   updateTriggersState (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) {
     const triggersInput = event.target.value;
     this.setState({ triggersInput });
-    this.updateGroup(triggersInput, this.state.answersInput);
+    this.setUpdateDebounce();
   }
 
-  async updateGroup (triggersInput: string, answersInput: string) {
-    const answers = splitTrim(answersInput);
-    const triggers = splitTrim(triggersInput);
+  setUpdateDebounce () {
+    if (this.updateDebounce) {
+      clearTimeout(this.updateDebounce);
+    }
+    this.updateDebounce = window.setTimeout(() => this.updateGroup(), 400);
+  }
+
+  async updateGroup () {
+    const answers = splitTrim(this.state.answersInput);
+    const triggers = splitTrim(this.state.triggersInput);
     const isEmpty = (answers.length === 0 && triggers.length === 0);
 
     const groupId = await updateTriggerGroup(
