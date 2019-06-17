@@ -17,10 +17,6 @@ module.exports = {
         test: /\.(jpg|jpeg|gif|png)$/,
         loader:'url-loader?limit=1024&name=images/[name].[ext]'
       },
-      // {
-      //   test: /\.(woff|woff2|eot|ttf|svg)$/,
-      //   loader: 'url-loader?limit=1024&name=fonts/[name].[ext]'
-      // },
       {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
         use: [{

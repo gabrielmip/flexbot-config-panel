@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { TextField, Box, Button } from '@material-ui/core';
-import { withStyles, WithStyles, Card, CardContent, Collapse } from '@material-ui/core';
+import { Card, CardContent, Collapse } from '@material-ui/core';
+import { withStyles, WithStyles } from '@material-ui/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import styles from '../styles/TriggerGroup';
