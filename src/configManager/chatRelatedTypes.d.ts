@@ -11,6 +11,7 @@ export interface TriggerGroup {
   'chatId': ID;
   'ignoreCase': boolean;
   'ignoreRepeatedLetters': boolean;
+  'isEmpty'?: boolean;
   'answers': Answer[];
   'triggers': Trigger[];
 }

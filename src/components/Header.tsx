@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { Component, Props } from 'react';
-
 import { Typography } from '@material-ui/core';
-import { Chat } from '../configManager/chatRelatedTypes';
 
-interface HeaderProps extends Props<{}> {
-  chat: Chat;
-}
 
-export class Header extends Component<HeaderProps> {
+export class Header extends Component<Props<{}>> {
   render () {
     return (
       <div>
-        <Typography variant='h2' component='h1'>Flexbot panel</Typography>
+        <Typography variant='h1' style={{lineHeight: 1.8}}>
+          Flexbot panel
+        </Typography>
+        <Typography style={{lineHeight: 1.8}}>
+          Welcome to the settings of your Flexbot!
+          <br />
+          Press the button below to start playing.
+          You can set multiple triggers and responses entering them in separate lines.
+        </Typography>
       </div>
     );
   }

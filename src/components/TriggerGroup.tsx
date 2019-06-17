@@ -11,6 +11,8 @@ import { splitTrim } from '../utils/misc';
 
 interface GroupProps extends WithStyles<typeof styles> {
   triggerGroup: TriggerGroup;
+  announceDeletion: (groupId: number) => void;
+  updateIsEmpty: (groupId: number, isEmpty: boolean) => void;
 }
 
 interface GroupState {
@@ -40,7 +42,7 @@ class UndecoratedTriggerGroup extends Component<GroupProps, GroupState> {
   }
 
   getCardStyle () {
-    const paddingAmount = (this.state.showDeleteButton) ? 10 : 20;
+    const paddingAmount = (this.state.showDeleteButton) ? 5 : 20;
     return { paddingBottom: `${paddingAmount}px !important` };
   }
 
@@ -62,18 +64,21 @@ class UndecoratedTriggerGroup extends Component<GroupProps, GroupState> {
   }
 
   updateAnswersState (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) {
-    this.setState({ answersInput: event.target.value });
-    this.updateGroup();
+    const answersInput = event.target.value;
+    this.setState({ answersInput });
+    this.updateGroup(this.state.triggersInput, answersInput);
   }
 
   updateTriggersState (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) {
-    this.setState({ triggersInput: event.target.value });
-    this.updateGroup();
+    const triggersInput = event.target.value;
+    this.setState({ triggersInput });
+    this.updateGroup(triggersInput, this.state.answersInput);
   }
 
-  async updateGroup () {
-    const answers = splitTrim(this.state.answersInput);
-    const triggers = splitTrim(this.state.triggersInput);
+  async updateGroup (triggersInput: string, answersInput: string) {
+    const answers = splitTrim(answersInput);
+    const triggers = splitTrim(triggersInput);
+    const isEmpty = (answers.length === 0 && triggers.length === 0);
 
     const groupId = await updateTriggerGroup(
       this.props.triggerGroup.triggerGroupId,
@@ -84,17 +89,16 @@ class UndecoratedTriggerGroup extends Component<GroupProps, GroupState> {
     );
 
     this.props.triggerGroup.triggerGroupId = groupId;
+    this.props.updateIsEmpty(groupId, isEmpty);
   }
 
   deleteGroup () {
     const groupId = this.props.triggerGroup.triggerGroupId;
-    const deletionPromise: Promise<boolean> = (groupId)
-      ? deleteTriggerGroup(groupId)
-      : Promise.resolve(true);
-
-    deletionPromise.then((deleted) => {
-      this.setState({ isVisible: !deleted });
-    });
+    deleteTriggerGroup(groupId)
+      .then((deleted) => {
+        this.setState({ isVisible: !deleted });
+        this.props.announceDeletion(groupId);
+      });
   }
 
   render () {
