@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Props, Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Container, Box, Button, CircularProgress, Typography } from '@material-ui/core';
+import { Grid, Box, Button, CircularProgress, Typography } from '@material-ui/core';
+import { withStyles, WithStyles } from '@material-ui/styles';
 
+import pageStyles from '../styles/ConfigPanelPage';
 import { Chat, TriggerGroup } from '../configManager/chatRelatedTypes';
 import { getChatInfo, addTriggerGroup } from '../configManager/configManager';
 import { setDefaultAuthorizationHeader } from '../authentication/tokenHandler';
@@ -14,7 +16,7 @@ interface ConfigPanelParams {
 }
 
 interface ConfigPanelProps extends
-  RouteComponentProps<ConfigPanelParams>, Props<ConfigPanelParams> { }
+  RouteComponentProps<ConfigPanelParams>, Props<ConfigPanelParams>, WithStyles<typeof pageStyles> { }
 
 interface ConfigPanelState {
   chat: Chat | null;
@@ -30,7 +32,7 @@ function setIsEmptyInGroups (groups: TriggerGroup[]): TriggerGroup[] {
   });
 }
 
-export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigPanelState> {
+class ConfigPanel extends Component<ConfigPanelProps, ConfigPanelState> {
   token: string;
 
   constructor (props: ConfigPanelProps) {
@@ -39,7 +41,8 @@ export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigP
     this.state = {
       loading: true,
       chat: null,
-      internalError: false
+      internalError: false,
+      unauthorizedError: false
     };
     setDefaultAuthorizationHeader(this.token);
   }
@@ -152,12 +155,15 @@ export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigP
 
   render () {
     return (
-      <Container maxWidth='md'>
+      <Grid className={this.props.classes.container}>
         <Header />
         <Box style={{ marginTop: 30 }}>
           {this.buildPanelBody()}
         </Box>
-      </Container>
+      </Grid>
     );
   }
 }
+
+const ConfigPanelPage = withStyles(pageStyles)(ConfigPanel);
+export default ConfigPanelPage;
