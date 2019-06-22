@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { TextField, Box, Button } from '@material-ui/core';
-import { Card, CardContent, Collapse } from '@material-ui/core';
+import { TextField, Box, Fab } from '@material-ui/core';
+import { Card, CardContent } from '@material-ui/core';
 import { withStyles, WithStyles } from '@material-ui/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import styles from '../styles/TriggerGroup';
+import triggerStyles from '../styles/TriggerGroup';
 import { TriggerGroup } from '../configManager/chatRelatedTypes';
 import { updateTriggerGroup, deleteTriggerGroup } from '../configManager/configManager';
 import { splitTrim } from '../utils/misc';
 
-interface GroupProps extends WithStyles<typeof styles> {
+interface GroupProps extends WithStyles<typeof triggerStyles> {
   triggerGroup: TriggerGroup;
   announceDeletion: (groupId: number) => void;
   updateIsEmpty: (groupId: number, isEmpty: boolean) => void;
@@ -116,12 +116,17 @@ class UndecoratedTriggerGroup extends Component<GroupProps, GroupState> {
     }
 
     return (
-      <div
-        style={{ position: 'relative' }}
-        onMouseEnter={() => this.startActionBoxTimeout()}
-        onMouseLeave={() => this.closeActionBox()}>
+      <div style={{ position: 'relative' }}>
         <Card
           className={this.props.classes.triggerGroup}>
+          <Fab
+            color='default'
+            size='small'
+            aria-label='Delete'
+            onClick={() => this.deleteGroup()}
+            className={this.props.classes.actionButtons}>
+            <DeleteIcon />
+          </Fab>
           <CardContent
             className={this.props.classes.card}
             style={this.getCardStyle()}>
@@ -147,19 +152,10 @@ class UndecoratedTriggerGroup extends Component<GroupProps, GroupState> {
                 variant='outlined' />
             </Box>
           </CardContent>
-          <Collapse in={this.state.showDeleteButton}>
-            <Button 
-              color='secondary'
-              className={this.props.classes.actionButtons}
-              onClick={() => this.deleteGroup()}>
-              <DeleteIcon />
-              Delete
-            </Button>
-          </Collapse>
         </Card>
       </div>
     );
   }
 }
 
-export const TriggerGroupContainer = withStyles(styles)(UndecoratedTriggerGroup);
+export const TriggerGroupContainer = withStyles(triggerStyles)(UndecoratedTriggerGroup);

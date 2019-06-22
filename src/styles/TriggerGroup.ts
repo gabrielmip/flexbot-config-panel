@@ -5,12 +5,14 @@ const triggerStyles = createStyles({
     width: '49%'
   },
   triggerGroup: {
-    marginTop: 25
+    marginTop: 35
   },
   actionButtons: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center'
+    position: 'absolute',
+    top: -17,
+    right: -17,
+    width: 32,
+    height: 30
   },
   card: {
     paddingBottom: '20px !important'

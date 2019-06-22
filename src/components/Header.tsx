@@ -7,7 +7,7 @@ export class Header extends Component<Props<{}>> {
   render () {
     return (
       <div>
-        <Typography variant='h1' style={{lineHeight: 1.8}}>
+        <Typography variant='h1' style={{margin: '45 0'}}>
           Flexbot panel
         </Typography>
         <Typography style={{lineHeight: 1.8}}>
