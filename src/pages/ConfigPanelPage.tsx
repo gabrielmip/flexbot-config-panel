@@ -19,7 +19,8 @@ interface ConfigPanelProps extends
 interface ConfigPanelState {
   chat: Chat | null;
   loading: boolean;
-  errorOnLoad: boolean;
+  internalError: boolean;
+  unauthorizedError: boolean;
 }
 
 function setIsEmptyInGroups (groups: TriggerGroup[]): TriggerGroup[] {
@@ -38,7 +39,7 @@ export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigP
     this.state = {
       loading: true,
       chat: null,
-      errorOnLoad: false
+      internalError: false
     };
     setDefaultAuthorizationHeader(this.token);
   }
@@ -52,10 +53,19 @@ export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigP
           loading: false
         });
       })
-      .catch(() => this.setState({
-        loading: false,
-        errorOnLoad: true
-      }));
+      .catch((error) => {
+        const baseNewStatus = {
+          loading: false,
+          unauthorizedError: false,
+          internalError: false
+        };
+
+        if (error.response.status === 401) {
+          this.setState({ ...baseNewStatus, unauthorizedError: true });
+        } else {
+          this.setState({ ...baseNewStatus, internalError: true });
+        }
+      });
   }
 
   listTriggerGroups () {
@@ -114,10 +124,18 @@ export default class ConfigPanelPage extends Component<ConfigPanelProps, ConfigP
       return <CircularProgress />;
     }
 
-    if (this.state.errorOnLoad) {
-      return<Typography color='error'>
+    if (this.state.internalError) {
+      return <Typography color='error'>
         So... something weird happened when I was trying to get your bot&lsquo;s responses.
         Please, try again later.
+      </Typography>;
+    }
+
+    if (this.state.unauthorizedError) {
+      return <Typography color='error'>
+        You are not allowed to see this page. It might just be that the link is too old.
+        Go to the conversation that this bot is part of on your Telegram app and type /config
+        to get an up to date link.
       </Typography>;
     }
     
