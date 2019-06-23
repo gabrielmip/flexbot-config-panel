@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Props, Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Grid, Box, Button, CircularProgress, Typography } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/styles';
+import { withStyles, WithStyles, ThemeProvider } from '@material-ui/styles';
 
 import pageStyles from '../styles/ConfigPanelPage';
+import responsiveTheme from '../styles/responsiveTheme';
 import { Chat, TriggerGroup } from '../configManager/chatRelatedTypes';
 import { getChatInfo, addTriggerGroup } from '../configManager/configManager';
 import { setDefaultAuthorizationHeader } from '../authentication/tokenHandler';
@@ -155,12 +156,14 @@ class ConfigPanel extends Component<ConfigPanelProps, ConfigPanelState> {
 
   render () {
     return (
-      <Grid className={this.props.classes.container}>
-        <Header />
-        <Box style={{ marginTop: 30 }}>
-          {this.buildPanelBody()}
-        </Box>
-      </Grid>
+      <ThemeProvider theme={responsiveTheme}>
+        <Grid className={this.props.classes.container}>
+          <Header />
+          <Box style={{ marginTop: 30 }}>
+            {this.buildPanelBody()}
+          </Box>
+        </Grid>
+      </ThemeProvider>
     );
   }
 }

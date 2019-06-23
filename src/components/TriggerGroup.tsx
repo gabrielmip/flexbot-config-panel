@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Component } from 'react';
 import { TextField, Box, Fab } from '@material-ui/core';
 import { Card, CardContent } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/styles';
+import { withStyles, WithStyles, ThemeProvider } from '@material-ui/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import responsiveTheme from '../styles/responsiveTheme';
 import triggerStyles from '../styles/TriggerGroup';
 import { TriggerGroup } from '../configManager/chatRelatedTypes';
 import { updateTriggerGroup, deleteTriggerGroup } from '../configManager/configManager';
@@ -116,44 +117,46 @@ class UndecoratedTriggerGroup extends Component<GroupProps, GroupState> {
     }
 
     return (
-      <div style={{ position: 'relative' }}>
-        <Card
-          className={this.props.classes.triggerGroup}>
-          <Fab
-            color='default'
-            size='small'
-            aria-label='Delete'
-            onClick={() => this.deleteGroup()}
-            className={this.props.classes.actionButtons}>
-            <DeleteIcon />
-          </Fab>
-          <CardContent
-            className={this.props.classes.card}
-            style={this.getCardStyle()}>
-            <Box display='flex' flexWrap='nowrap'>
-              <TextField
-                className={this.props.classes.field}
-                label='When you say...'
-                placeholder=''
-                multiline
-                rows='3'
-                value={this.state.triggersInput}
-                onChange={(e) => this.updateTriggersState(e)}
-                variant='outlined' />
-              <TextField
-                className={this.props.classes.field}
-                style={{ marginLeft: 15 }}
-                label='The bot says...'
-                placeholder=''
-                multiline
-                rows='3'
-                value={this.state.answersInput}
-                onChange={(e) => this.updateAnswersState(e)}
-                variant='outlined' />
-            </Box>
-          </CardContent>
-        </Card>
-      </div>
+      <ThemeProvider theme={responsiveTheme}>
+        <div style={{ position: 'relative' }}>
+          <Card
+            className={this.props.classes.triggerGroup}>
+            <Fab
+              color='default'
+              size='small'
+              aria-label='Delete'
+              onClick={() => this.deleteGroup()}
+              className={this.props.classes.actionButtons}>
+              <DeleteIcon />
+            </Fab>
+            <CardContent
+              className={this.props.classes.card}
+              style={this.getCardStyle()}>
+              <Box display='flex' flexWrap='nowrap'>
+                <TextField
+                  className={this.props.classes.field}
+                  label='When you say...'
+                  placeholder=''
+                  multiline
+                  rows='3'
+                  value={this.state.triggersInput}
+                  onChange={(e) => this.updateTriggersState(e)}
+                  variant='outlined' />
+                <TextField
+                  className={this.props.classes.field}
+                  style={{ marginLeft: 15 }}
+                  label='The bot says...'
+                  placeholder=''
+                  multiline
+                  rows='3'
+                  value={this.state.answersInput}
+                  onChange={(e) => this.updateAnswersState(e)}
+                  variant='outlined' />
+              </Box>
+            </CardContent>
+          </Card>
+        </div>
+      </ThemeProvider>
     );
   }
 }

@@ -10,7 +10,7 @@ export class Header extends Component<Props<{}>> {
         <Typography variant='h1' style={{margin: '45 0'}}>
           Flexbot panel
         </Typography>
-        <Typography style={{lineHeight: 1.8}}>
+        <Typography variant='body1' style={{lineHeight: 1.8}}>
           Welcome to the settings of your Flexbot!
           <br />
           Press the button below to start playing.
